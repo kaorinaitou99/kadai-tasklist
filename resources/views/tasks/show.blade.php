@@ -11,7 +11,7 @@
         </tr>
         <tr>
             <th>status</th>
-            <td>{{ $task->status }}</td>
+            <td>{{ $task->title }}</td>
         </tr>
         <tr>
             <th>タスク</th>
@@ -26,5 +26,3 @@
     {!! Form::close() !!}
 
 @endsection
-
-

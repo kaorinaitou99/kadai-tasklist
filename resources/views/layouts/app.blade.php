@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>TaskList</title>
+        <title> TaskList</title>
 
         <!-- Bootstrap -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -16,9 +16,10 @@
         @include('commons.navbar')
 
         <div class="container">
-            @include('commons.error_tasks')
+            @include('commons.error_messages')
 
             @yield('content')
         </div>
     </body>
+</html>
 </html>

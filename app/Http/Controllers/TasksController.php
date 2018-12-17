@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Task;    // 追加
+use App\User;
 
 class TasksController extends Controller
 {
@@ -13,14 +14,23 @@ class TasksController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-     public function index()			
-    {			
-        $tasks = Task::all();			
-			
-        return view('tasks.index', [			
-            'tasks' => $tasks,			
-        ]);			
-    }	
+     public function index()
+    {
+        $data = [];
+        if (\Auth::check()) {
+            $user = \Auth::user();
+            $tasklist = $user->tasklist()->orderBy('created_at', 'desc')->paginate(10);
+
+            $data = [
+                'user' => $user,
+                'tasks' => $tasklist,
+            ];
+            $data += $this->counts($user);
+            return view('tasks.index', $data);
+        }else {
+            return view('welcome');
+        }
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -52,8 +62,9 @@ class TasksController extends Controller
         $task = new Task;
         $task->status = $request->status;    // 追加
         $task->content = $request->content;
+        $task->user_id = $request->user()->id;
         $task->save();
-
+        
         return redirect('/');
     }
 
@@ -64,19 +75,20 @@ class TasksController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        $task = Task::find($id);
-
-        return view('tasks.show', [
-            'task' => $task,
-        ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     {
+         $task = Task::find($id);
+ 
+         return view('tasks.show', [
+             'task' => $task,
+         ]);
+     }
+ 
+     /**
+      * Show the form for editing the specified resource.
+      *
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+     
      */
     public function edit($id)
     {
